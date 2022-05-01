@@ -57,4 +57,10 @@ XClass2=np.histogram(X[1],bin_edges_cale)
 
 XClass1Hist,XClass1BinEdges=XClass1
 XClass2Hist,XClass2BinEdges=XClass2
-print(hellinger_explicit(XClass1Hist,XClass2Hist))
+XClass1NormalizedFrequencies=XClass1Hist/sum(XClass1Hist)
+XClass2NormalizedFrequencies=XClass2Hist/sum(XClass2Hist)
+# print(XClass1Hist)
+# print(sum(XClass1Hist))
+# print(XClass1P)
+
+print(hellinger_explicit(XClass1NormalizedFrequencies,XClass2NormalizedFrequencies))
