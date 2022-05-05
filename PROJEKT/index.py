@@ -72,7 +72,7 @@ def hellinger_explicit(p, q):
     """Hellinger distance between two discrete distributions.
        Same as original version but without list comprehension
     """
-
+    
 
     list_of_squares = []
     for p_i, q_i in zip(p, q):
