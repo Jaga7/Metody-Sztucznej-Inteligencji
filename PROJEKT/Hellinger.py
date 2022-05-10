@@ -50,38 +50,38 @@ Xcale=np.histogram(X)
 #     return sosq / math.sqrt(2)
 
 
-# def hellinger_explicit(X, y):
-#     """Hellinger distance between two discrete distributions.
-#        Same as original version but without list comprehension
-#     """
-#     # p=np.histogram(p)
-#     # q=np.histogram(q)
+def hellinger_explicit(X, y):
+    """Hellinger distance between two discrete distributions.
+       Same as original version but without list comprehension
+    """
+    # p=np.histogram(p)
+    # q=np.histogram(q)
     
 
-#     # To poniżej to raczej ma być pętla i takie coś dla każdego atrybutu
-#     XHist,XBinEdges=np.histogram(X)
-#     XClass1=np.histogram(X[0],XBinEdges)
-#     XClass2=np.histogram(X[1],XBinEdges)
-#     XClass1Hist,XClass1BinEdges=XClass1
-#     XClass2Hist,XClass2BinEdges=XClass2
-#     XClass1NormalizedFrequencies=XClass1Hist/sum(XClass1Hist)
-#     XClass2NormalizedFrequencies=XClass2Hist/sum(XClass2Hist)
+    # To poniżej to raczej ma być pętla i takie coś dla każdego atrybutu
+    XHist,XBinEdges=np.histogram(X)
+    XClass1=np.histogram(X[0],XBinEdges)
+    XClass2=np.histogram(X[1],XBinEdges)
+    XClass1Hist,XClass1BinEdges=XClass1
+    XClass2Hist,XClass2BinEdges=XClass2
+    XClass1NormalizedFrequencies=XClass1Hist/sum(XClass1Hist)
+    XClass2NormalizedFrequencies=XClass2Hist/sum(XClass2Hist)
 
-#     list_of_squares = []
-#     for p_i, q_i in zip(XClass1NormalizedFrequencies, XClass2NormalizedFrequencies,strict=True):
+    list_of_squares = []
+    for p_i, q_i in zip(XClass1NormalizedFrequencies, XClass2NormalizedFrequencies,strict=True):
 
-#         # caluclate the square of the difference of ith distr elements
-#         s = (math.sqrt(p_i) - math.sqrt(q_i)) ** 2
+        # caluclate the square of the difference of ith distr elements
+        s = (math.sqrt(p_i) - math.sqrt(q_i)) ** 2
 
-#         # append 
-#         list_of_squares.append(s)
+        # append 
+        list_of_squares.append(s)
 
-#     # calculate sum of squares
-#     sosq = sum(list_of_squares)    
+    # calculate sum of squares
+    sosq = sum(list_of_squares)    
 
-#     return sosq / math.sqrt(2)
+    return sosq / math.sqrt(2)
 
-
+# to chyba było źle i nie usunąłem
 histCale, bin_edges_cale=Xcale
 XAttribute1=np.histogram(X[:,0],bin_edges_cale)
 XAttribute2=np.histogram(X[:,1],bin_edges_cale)
@@ -106,17 +106,22 @@ XAttribute2NormalizedFrequencies=XAttribute2Hist/sum(XAttribute2Hist)
 #         print(idxSample, value)
 
 
+
+
 # stworzenie 3-wymiarowej macierzy, klasy, atrybuty, wartości w binach
 valuesOfAttributes = np.zeros((2, X[0].shape[0], len(bin_edges_cale)-1))
 
-
+# bin_edges_cale chyba będzie trzeba inne dla każdego atrybutu
+# Bierzemy bin_edges_cale (tu dla atrybutu o indeksie 0), wykorzystamy przy tworzeniu histogramów dla X+ i X-
+Xcale=np.histogram(X[:,0])
+histCale, bin_edges_cale=Xcale
 
 # Służy do zapisania wartości dla różnych klas i zrobienia z nich histogramów
 valuesOfAttributesForClass0=[]
 valuesOfAttributesForClass1=[]
 
 
-#iterowanie przez wartości atrybutu o indeksie 0 = XAttribute1, zapisanie do tablicy i tu powinno się 2 histogramy z nich
+#iterowanie przez wartości atrybutu o indeksie 0, zapisanie do tablicy i tu powinno się 2 histogramy z nich
 for idxSample, value in enumerate(X[:,0]):
     if y[idxSample]==0:valuesOfAttributesForClass0.append(value)
     if y[idxSample]==1:valuesOfAttributesForClass1.append(value)
@@ -127,15 +132,15 @@ for idxSample, value in enumerate(X[:,0]):
         XClass1Hist,XClass1BinEdges=XClass1
         XClass0NormalizedFrequencies=XClass0Hist/sum(XClass0Hist)
         XClass1NormalizedFrequencies=XClass1Hist/sum(XClass1Hist)
-        # zapisanie prawdopodobieństw rozkładów do macierzy
+        # zapisanie prawdopodobieństw występowań (w sensie normalized frequencies) dla rozkładów do macierzy
         valuesOfAttributes[0,0]=XClass0NormalizedFrequencies
         valuesOfAttributes[1,0]=XClass1NormalizedFrequencies
 
 
-#iterowanie przez wartości w binach atrybutu o indeksie 0 = XAttribute1
+#iterowanie przez wartości w binach atrybutu o indeksie 0 o klasie 0
 for idxBin, value in enumerate(XAttribute1NormalizedFrequencies):
     if y[idxBin]==0:valuesOfAttributes[0,0,idxBin]
-    # print(idxBin, value)
+    # print(idxBin, value)o
 
 
 print(valuesOfAttributes[0,0])
