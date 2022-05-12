@@ -25,9 +25,23 @@ clf= GaussianNB()
 #     test_size=.2,
 # )
 
+# segment0 dataset wczytywanie
+
 segment0_dataset=np.genfromtxt('segment0.csv',delimiter=';')
+print(segment0_dataset.shape)
+print(segment0_dataset[2206,6])
 X=segment0_dataset[:,0:19]
 y=segment0_dataset.astype(int)[:,19]
+
+# cleveland-0_vs_4 dataset wczytywanie
+
+# cleveland_0_vs_4_dataset=np.genfromtxt('cleveland-0_vs_4.csv',delimiter=';')
+# print(cleveland_0_vs_4_dataset.shape)
+# X=cleveland_0_vs_4_dataset[:,0:13]
+# # print(X2)
+# print(X)
+# y=cleveland_0_vs_4_dataset.astype(int)[:,13]
+# print(y)
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
