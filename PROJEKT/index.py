@@ -8,8 +8,34 @@ from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import MinMaxScaler
+# from sklearn.metrics import recall, precision, specificity, f1_score, geometric_mean_score_1, balanced_accuracy_score
+from sklearn.model_selection import RepeatedStratifiedKFold
+from sklearn.base import clone
+
+# n_splits = 5
+# n_repeats = 2
+# rskf = RepeatedStratifiedKFold(
+#     n_splits=n_splits, n_repeats=n_repeats, random_state=42)
+
 
 clf= GaussianNB()
+
+# datasets = ['australian',]
+
+# n_datasets = len(datasets)
+
+# metrics = {
+#     "recall": recall,
+#     'precision': precision,
+#     'specificity': specificity,
+#     'f1': f1_score,
+#     'g-mean': geometric_mean_score_1,
+#     'bac': balanced_accuracy_score,
+# }
+
+# scores = np.zeros( n_datasets,n_splits * n_repeats, len(metrics))
+
+
 # X, y = datasets.make_classification(
 #     n_samples=500,
 # )
@@ -29,7 +55,7 @@ clf= GaussianNB()
 
 segment0_dataset=np.genfromtxt('segment0.csv',delimiter=';')
 print(segment0_dataset.shape)
-print(segment0_dataset[2206,6])
+# print(segment0_dataset[2206,6])
 X=segment0_dataset[:,0:19]
 y=segment0_dataset.astype(int)[:,19]
 
@@ -123,26 +149,29 @@ def hellinger(X, y):
 
 def give_discretized_distributions(X, y):
 
-    # Bierzemy bin_edges_cale, wykorzystamy przy tworzeniu histogramów dla X+ i X-
-    Xcale=np.histogram(X)
-    histCale, bin_edges_cale=Xcale
+    # # Służy tylko do 
+    # Xcale=np.histogram(X)
+    # histCale, bin_edges_cale=Xcale
 
     # stworzenie 3-wymiarowej macierzy, atrybuty, klasy, wartości w binach
-    valuesOfAttributes = np.zeros((X[0].shape[0],2,  len(bin_edges_cale)-1))
+    # valuesOfAttributes = np.zeros((X[0].shape[0],2,  len(bin_edges_cale)-1))
+    valuesOfAttributes = np.zeros((X[0].shape[0],2,  10))
 
     # X[0] daje wartości atrybutów dla próbki o indeksie 0, bierzemy w celu przeiterowania przez ilość atrybutów
     for idxAttribute, uselessValue in enumerate(X[0]):
         # Służy do zapisania wartości dla różnych klas i zrobienia z nich histogramów
         valuesOfAttributesForClass0=[]
         valuesOfAttributesForClass1=[]
+        # Bierzemy bin_edges_cale, wykorzystamy przy tworzeniu histogramów dla X+ i X-
+        histAtrybutu, bin_edges_atrybutu=np.histogram(X[:,idxAttribute])
 
         #iterowanie przez wartości atrybutu o indeksie idxAttribute, zapisanie do tablicy i tu powinno się 2 histogramy z nich
         for idxSample, value in enumerate(X[:,idxAttribute]):
             if y[idxSample]==0:valuesOfAttributesForClass0.append(value)
             if y[idxSample]==1:valuesOfAttributesForClass1.append(value)
             if(idxSample==len(X[:,0])-1): 
-                XClass0=np.histogram(valuesOfAttributesForClass0,bin_edges_cale)
-                XClass1=np.histogram(valuesOfAttributesForClass1,bin_edges_cale)
+                XClass0=np.histogram(valuesOfAttributesForClass0,bin_edges_atrybutu)
+                XClass1=np.histogram(valuesOfAttributesForClass1,bin_edges_atrybutu)
                 XClass0Hist,XClass0BinEdges=XClass0
                 XClass1Hist,XClass1BinEdges=XClass1
                 XClass0NormalizedFrequencies=XClass0Hist/sum(XClass0Hist)

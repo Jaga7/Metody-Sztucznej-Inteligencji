@@ -77,26 +77,29 @@ def hellinger(X, y):
 
 def give_discretized_distributions(X, y):
 
-    # Bierzemy bin_edges_cale, wykorzystamy przy tworzeniu histogramów dla X+ i X-
-    Xcale=np.histogram(X)
-    histCale, bin_edges_cale=Xcale
+    # # Służy tylko do 
+    # Xcale=np.histogram(X)
+    # histCale, bin_edges_cale=Xcale
 
     # stworzenie 3-wymiarowej macierzy, atrybuty, klasy, wartości w binach
-    valuesOfAttributes = np.zeros((X[0].shape[0],2,  len(bin_edges_cale)-1))
+    # valuesOfAttributes = np.zeros((X[0].shape[0],2,  len(bin_edges_cale)-1))
+    valuesOfAttributes = np.zeros((X[0].shape[0],2,  10))
 
     # X[0] daje wartości atrybutów dla próbki o indeksie 0, bierzemy w celu przeiterowania przez ilość atrybutów
     for idxAttribute, uselessValue in enumerate(X[0]):
         # Służy do zapisania wartości dla różnych klas i zrobienia z nich histogramów
         valuesOfAttributesForClass0=[]
         valuesOfAttributesForClass1=[]
+        # Bierzemy bin_edges_cale, wykorzystamy przy tworzeniu histogramów dla X+ i X-
+        histAtrybutu, bin_edges_atrybutu=np.histogram(X[:,idxAttribute])
 
         #iterowanie przez wartości atrybutu o indeksie idxAttribute, zapisanie do tablicy i tu powinno się 2 histogramy z nich
         for idxSample, value in enumerate(X[:,idxAttribute]):
             if y[idxSample]==0:valuesOfAttributesForClass0.append(value)
             if y[idxSample]==1:valuesOfAttributesForClass1.append(value)
             if(idxSample==len(X[:,0])-1): 
-                XClass0=np.histogram(valuesOfAttributesForClass0,bin_edges_cale)
-                XClass1=np.histogram(valuesOfAttributesForClass1,bin_edges_cale)
+                XClass0=np.histogram(valuesOfAttributesForClass0,bin_edges_atrybutu)
+                XClass1=np.histogram(valuesOfAttributesForClass1,bin_edges_atrybutu)
                 XClass0Hist,XClass0BinEdges=XClass0
                 XClass1Hist,XClass1BinEdges=XClass1
                 XClass0NormalizedFrequencies=XClass0Hist/sum(XClass0Hist)
@@ -111,16 +114,6 @@ def give_discretized_distributions(X, y):
 dystanse=hellinger(X,y)
 print(dystanse)
 
-# dupa=give_discretized_distributions(X,y)
-# print(dupa.shape)
-# print(dupa[0,0])
-# print(dupa[0,1])
-# # iterowanie przez rozkłady dla atrybutów
-# for idxAttribute, distributionsForClasses in enumerate(dupa[:,]):
-#     # iterowanie przez biny, indeks 0 tylko po to żeby dostać ilość binów
-#     for wartośćWBinieDlaKlasy0, wartośćWBinieDlaKlasy1 in zip(distributionsForClasses[0], distributionsForClasses[1]):
-#         print(idxAttribute," a wartość w binie dla klasy 0: ", wartośćWBinieDlaKlasy0," a wartość w binie dla klasy 1: ", wartośćWBinieDlaKlasy1)
-    
 
 
 # #iterowanie przez wartości w binach atrybutu o indeksie 0 o klasie 0
