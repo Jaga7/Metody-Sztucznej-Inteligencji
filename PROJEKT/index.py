@@ -78,26 +78,25 @@ def hellinger(X, y):
     valuesOfAttributes = np.zeros((2, X[0].shape[0], len(bin_edges_cale)-1))
     valuesOfAttributes = give_discretized_distributions(X, y)
     
-    list_of_distances=[]
+    array_of_distances=[]
 
-    list_of_squares = []
+    array_of_squares = []
 
     # iterowanie przez rozkłady dla atrybutów
     for idxAttribute, distributionsForClasses in enumerate(valuesOfAttributes[:,]):
-        list_of_squares = []
+        array_of_squares = []
         # iterowanie przez biny, indeks 0 tylko po to żeby dostać ilość binów
         for wartośćWBinieDlaKlasy0, wartośćWBinieDlaKlasy1 in zip(distributionsForClasses[0], distributionsForClasses[1]):
-            s = (math.sqrt(wartośćWBinieDlaKlasy0) - math.sqrt(wartośćWBinieDlaKlasy1)) ** 2
-            list_of_squares.append(s)
-            if(len(list_of_squares)==len(distributionsForClasses[0])):
-                sosq = sum(list_of_squares)
-                list_of_distances.append(sosq / math.sqrt(2))
+            calculation = (math.sqrt(wartośćWBinieDlaKlasy0) - math.sqrt(wartośćWBinieDlaKlasy1)) ** 2
+            array_of_squares.append(calculation)
+            if(len(array_of_squares)==len(distributionsForClasses[0])):
+                sum_of_squares = sum(array_of_squares)
+                array_of_distances.append(sum_of_squares / math.sqrt(2))
 
-    proba_p_values=[]
-    for idxAttribute, uselessValue in enumerate(list_of_distances):
-        proba_p_values.append(1)
+    # we don't need to return p_values for SelectKBest method, so we return an array of zeros
+    WRONGp_values=np.zeros(len(array_of_distances))
 
-    return list_of_distances,proba_p_values
+    return array_of_distances,WRONGp_values
 
 
 def give_discretized_distributions(X, y):
