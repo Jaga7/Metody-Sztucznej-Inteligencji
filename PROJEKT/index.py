@@ -10,21 +10,29 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import MinMaxScaler
 
 clf= GaussianNB()
-X, y = datasets.make_classification(
-    n_samples=500,
-)
+# X, y = datasets.make_classification(
+#     n_samples=500,
+# )
 
-# # normal_samples = np.random.normal(0, 1, np.shape(X[1]))
+# # # normal_samples = np.random.normal(0, 1, np.shape(X[1]))
 
-# # print(f"\n{normal_samples}")
+# # # print(f"\n{normal_samples}")
 
-# # X *= normal_samples[None, :]
+# # # X *= normal_samples[None, :]
+
+# X_train, X_test, y_train, y_test = train_test_split(
+#     X, y,
+#     test_size=.2,
+# )
+
+segment0_dataset=np.genfromtxt('segment0.csv',delimiter=';')
+X=segment0_dataset[:,0:19]
+y=segment0_dataset.astype(int)[:,19]
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
     test_size=.2,
 )
-
 # Bez feature selection
 print("Bez feature selection")
 print(X_train.shape)

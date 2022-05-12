@@ -17,6 +17,29 @@ X_train, X_test, y_train, y_test = train_test_split(
     test_size=.2,
 )
 
+segment0_dataset=np.genfromtxt('segment0.csv',delimiter=';')
+print(segment0_dataset.shape)
+print(segment0_dataset[2206,6])
+X=segment0_dataset[:,0:19]
+# print(X2)
+# print(X)
+# print(segment0_dataset.astype(float)[:,19:20])
+y=segment0_dataset.astype(int)[:,19]
+# print(y)
+
+for idx, value in enumerate(X):
+    for idx2, value2 in enumerate(value):
+        if(math.isnan(value2)):
+            print(idx)
+            print("nanaa") 
+            print(idx2)
+            print(value2)
+
+# print(y)
+# X2 = segment0_dataset[:, :-1]
+# y2 = segment0_dataset[:, -1].astype(int)
+# print(X2)
+# print(y2)
 
 
 # Feature selection: hellinger
