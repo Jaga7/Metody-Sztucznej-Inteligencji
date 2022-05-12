@@ -68,28 +68,72 @@ print(accuracy_score(y_test, y_pred),"\n")
 
 # Feature selection: hellinger
 
-def hellinger_explicit(p, q):
-    """Hellinger distance between two discrete distributions.
-       Same as original version but without list comprehension
-    """
+def hellinger(X, y):
+
+    # Bierzemy bin_edges_cale, wykorzystamy przy tworzeniu histogramów dla X+ i X-
+    Xcale=np.histogram(X)
+    histCale, bin_edges_cale=Xcale
+
+    # stworzenie 3-wymiarowej macierzy, klasy, atrybuty, wartości w binach
+    valuesOfAttributes = np.zeros((2, X[0].shape[0], len(bin_edges_cale)-1))
+    valuesOfAttributes = give_discretized_distributions(X, y)
     
+    list_of_distances=[]
 
     list_of_squares = []
-    for p_i, q_i in zip(p, q):
 
-        # caluclate the square of the difference of ith distr elements
-        s = (math.sqrt(p_i) - math.sqrt(q_i)) ** 2
+    # iterowanie przez rozkłady dla atrybutów
+    for idxAttribute, distributionsForClasses in enumerate(valuesOfAttributes[:,]):
+        list_of_squares = []
+        # iterowanie przez biny, indeks 0 tylko po to żeby dostać ilość binów
+        for wartośćWBinieDlaKlasy0, wartośćWBinieDlaKlasy1 in zip(distributionsForClasses[0], distributionsForClasses[1]):
+            s = (math.sqrt(wartośćWBinieDlaKlasy0) - math.sqrt(wartośćWBinieDlaKlasy1)) ** 2
+            list_of_squares.append(s)
+            if(len(list_of_squares)==len(distributionsForClasses[0])):
+                sosq = sum(list_of_squares)
+                list_of_distances.append(sosq / math.sqrt(2))
 
-        # append 
-        list_of_squares.append(s)
+    proba_p_values=[]
+    for idxAttribute, uselessValue in enumerate(list_of_distances):
+        proba_p_values.append(1)
 
-    # calculate sum of squares
-    sosq = sum(list_of_squares)    
-
-    return sosq / math.sqrt(2)
+    return list_of_distances,proba_p_values
 
 
-select=  SelectKBest(k=2, score_func=hellinger_explicit)
+def give_discretized_distributions(X, y):
+
+    # Bierzemy bin_edges_cale, wykorzystamy przy tworzeniu histogramów dla X+ i X-
+    Xcale=np.histogram(X)
+    histCale, bin_edges_cale=Xcale
+
+    # stworzenie 3-wymiarowej macierzy, atrybuty, klasy, wartości w binach
+    valuesOfAttributes = np.zeros((X[0].shape[0],2,  len(bin_edges_cale)-1))
+
+    # X[0] daje wartości atrybutów dla próbki o indeksie 0, bierzemy w celu przeiterowania przez ilość atrybutów
+    for idxAttribute, uselessValue in enumerate(X[0]):
+        # Służy do zapisania wartości dla różnych klas i zrobienia z nich histogramów
+        valuesOfAttributesForClass0=[]
+        valuesOfAttributesForClass1=[]
+
+        #iterowanie przez wartości atrybutu o indeksie idxAttribute, zapisanie do tablicy i tu powinno się 2 histogramy z nich
+        for idxSample, value in enumerate(X[:,idxAttribute]):
+            if y[idxSample]==0:valuesOfAttributesForClass0.append(value)
+            if y[idxSample]==1:valuesOfAttributesForClass1.append(value)
+            if(idxSample==len(X[:,0])-1): 
+                XClass0=np.histogram(valuesOfAttributesForClass0,bin_edges_cale)
+                XClass1=np.histogram(valuesOfAttributesForClass1,bin_edges_cale)
+                XClass0Hist,XClass0BinEdges=XClass0
+                XClass1Hist,XClass1BinEdges=XClass1
+                XClass0NormalizedFrequencies=XClass0Hist/sum(XClass0Hist)
+                XClass1NormalizedFrequencies=XClass1Hist/sum(XClass1Hist)
+                # zapisanie prawdopodobieństw występowań (w sensie normalized frequencies) dla rozkładów do macierzy
+                valuesOfAttributes[idxAttribute,0]=XClass0NormalizedFrequencies
+                valuesOfAttributes[idxAttribute,1]=XClass1NormalizedFrequencies
+
+    return valuesOfAttributes
+
+
+select=  SelectKBest(k=2, score_func=hellinger)
 # select= make_pipeline(MinMaxScaler(), SelectKBest(k=2, score_func=chi2))
 select.fit(X_train, y_train)
 print("Feature selection: Hellinger distance")
