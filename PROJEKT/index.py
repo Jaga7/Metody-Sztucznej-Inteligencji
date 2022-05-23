@@ -3,7 +3,7 @@ import numpy as np
 from sklearn import datasets
 from sklearn.feature_selection import SelectKBest, chi2, f_classif
 from sklearn.linear_model import RidgeCV
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, recall_score
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.pipeline import make_pipeline
@@ -21,8 +21,10 @@ from sklearn.base import clone
 clf= GaussianNB()
 
 # datasets = ['australian',]
+datasets = ['cleveland_0_vs_4', 'segment0', 'winequality_red_3_vs_5', 'winequality_red_4', 'winequality_red_8_vs_6',
+            'winequality_red_8_vs_6_7', 'winequality_white_3_9_vs_5', 'winequality_white_3_vs_7', 'winequality_white_9_vs_4']
 
-# n_datasets = len(datasets)
+n_datasets = len(datasets)
 
 # metrics = {
 #     "recall": recall,
@@ -33,31 +35,20 @@ clf= GaussianNB()
 #     'bac': balanced_accuracy_score,
 # }
 
-# scores = np.zeros( n_datasets,n_splits * n_repeats, len(metrics))
-
-
-# X, y = datasets.make_classification(
-#     n_samples=500,
-# )
-
-# # # normal_samples = np.random.normal(0, 1, np.shape(X[1]))
-
-# # # print(f"\n{normal_samples}")
-
-# # # X *= normal_samples[None, :]
-
-# X_train, X_test, y_train, y_test = train_test_split(
-#     X, y,
-#     test_size=.2,
-# )
-
+winequality_red_4_dataset=np.genfromtxt('winequality_red_4.csv',delimiter=';')
+print(winequality_red_4_dataset.shape)
+# print(winequality_red_4_dataset[2206,6])
+X=winequality_red_4_dataset[:, :-1]
+y=winequality_red_4_dataset[:, -1].astype(int)
+  
+print(X[4])
 # segment0 dataset wczytywanie
 
-segment0_dataset=np.genfromtxt('segment0.csv',delimiter=';')
-print(segment0_dataset.shape)
-# print(segment0_dataset[2206,6])
-X=segment0_dataset[:,0:19]
-y=segment0_dataset.astype(int)[:,19]
+# segment0_dataset=np.genfromtxt('segment0.csv',delimiter=';')
+# print(segment0_dataset.shape)
+# # print(segment0_dataset[2206,6])
+# X=segment0_dataset[:,0:19]
+# y=segment0_dataset.astype(int)[:,19]
 
 # cleveland-0_vs_4 dataset wczytywanie
 
