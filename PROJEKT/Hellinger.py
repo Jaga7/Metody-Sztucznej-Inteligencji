@@ -6,40 +6,21 @@ from sklearn.naive_bayes import GaussianNB
 
 
 clf= GaussianNB()
-X, y = datasets.make_classification(
-    n_samples=500,
-    n_features=12,
-    random_state=2140
-)
+# X, y = datasets.make_classification(
+#     n_samples=500,
+#     n_features=12,
+#     random_state=2140
+# )
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y,
-    test_size=.2,
-)
+# X_train, X_test, y_train, y_test = train_test_split(
+#     X, y,
+#     test_size=.2,
+# )
 
-segment0_dataset=np.genfromtxt('segment0.csv',delimiter=';')
-print(segment0_dataset.shape)
-print(segment0_dataset[2206,6])
-X=segment0_dataset[:,0:19]
-# print(X2)
-# print(X)
-# print(segment0_dataset.astype(float)[:,19:20])
-y=segment0_dataset.astype(int)[:,19]
-# print(y)
+dataset = np.genfromtxt("datasets/segment0.csv", delimiter=";")
+X = dataset[:, :-1]
+y = dataset[:, -1].astype(int)
 
-for idx, value in enumerate(X):
-    for idx2, value2 in enumerate(value):
-        if(math.isnan(value2)):
-            print(idx)
-            print("nanaa") 
-            print(idx2)
-            print(value2)
-
-# print(y)
-# X2 = segment0_dataset[:, :-1]
-# y2 = segment0_dataset[:, -1].astype(int)
-# print(X2)
-# print(y2)
 
 
 # Feature selection: hellinger
@@ -115,16 +96,3 @@ dystanse=hellinger(X,y)
 print(dystanse)
 
 
-
-# #iterowanie przez wartości w binach atrybutu o indeksie 0 o klasie 0
-# for idxBin, value in enumerate(XAttribute1NormalizedFrequencies):
-#     if y[idxBin]==0:valuesOfAttributes[0,0,idxBin]
-#     # print(idxBin, value)o
-
-
-# print(valuesOfAttributes[0,0])
-# print(valuesOfAttributes[1,0])
-
-# print("CAŁA MACIERZ 3-WYMIAROWA: ",valuesOfAttributes.shape)
-
-# print(hellinger_explicit(XClass1NormalizedFrequencies,XClass2NormalizedFrequencies))
