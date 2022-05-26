@@ -32,11 +32,11 @@ p_value_f1 = np.zeros((len(score_functions), len(score_functions)))
 
 for i in range(len(score_functions)):
     for j in range(len(score_functions)):
-        t_statistic_f1[i, j], p_value_f1[i, j] = ttest_rel(mean_scores[i,:,4], mean_scores[j,:,4])
+        t_statistic_f1[i, j], p_value_f1[i, j] = ttest_rel(mean_scores[i,:,5], mean_scores[j,:,5])
 # print("t-statistic:\n", t_statistic_f1, "\n\np-value:\n", p_value_f1)
 
 
-print("\nF1-score:\n")
+print("\nG-mean:\n")
 headers = ["chi2", "ANOVA", "Hellinger"]
 names_column = np.array([["chi2"], ["ANOVA"], ["Hellinger"]])
 t_statistic_table = np.concatenate((names_column, t_statistic_f1), axis=1)

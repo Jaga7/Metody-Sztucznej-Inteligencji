@@ -12,6 +12,7 @@ from sklearn.preprocessing import MinMaxScaler
 # from sklearn.metrics import recall, precision, specificity, f1_score, geometric_mean_score_1, balanced_accuracy_score
 from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.base import clone
+from sklearn.tree import DecisionTreeClassifier
 from Hellinger import hellinger
 
 clf= GaussianNB()
@@ -48,7 +49,7 @@ n_metrics=len(metrics)
 
 n_splits = 5
 n_repeats = 2
-rskf = RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats, random_state=1234)
+rskf = RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats, random_state=1420)
 
 scores=np.zeros((n_score_functions,n_datasets,n_metrics, n_splits * n_repeats))
 
@@ -61,9 +62,9 @@ for data_id, dataset in enumerate(datasets):
     for fold_id, (train, test) in enumerate(rskf.split(X, y)):
         for score_fun_id, score_fun_name in enumerate(score_functions):
             if(score_fun_name=="chi2"):
-                select=make_pipeline(MinMaxScaler(), SelectKBest( score_func=chi2,k=5))
+                select=make_pipeline(MinMaxScaler(), SelectKBest( score_func=chi2,k=8))
             else:
-                select=SelectKBest(score_functions[score_fun_name],k=5)
+                select=SelectKBest(score_functions[score_fun_name],k=8)
 
             select.fit(X[train], y[train])
 

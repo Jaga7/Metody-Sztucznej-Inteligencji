@@ -9,7 +9,7 @@ print(scores.shape)
 mean_scores = np.mean(scores, axis=1).T
 print(mean_scores.shape)
 
-metrics = {
+metrics = [
     "accuracy",
     "recall" ,
     'precision' ,
@@ -17,13 +17,13 @@ metrics = {
     'f1',
     'g-mean',
     'bac'
-}
+]
 
-score_functions= {
+score_functions= [
     "chi2",
     "f_classif",
     "hellinger"
-}
+]
 
 N = mean_scores.shape[0]
 
@@ -51,6 +51,7 @@ plt.ylim(0,1)
 
 # Dodajemy wlasciwe ploty dla kazdej z metod
 for score_function_id, score_function in enumerate(score_functions):
+    print("score_function_id",score_function_id,"score_function",score_function)
     values=mean_scores[:, score_function_id].tolist()
     values += values[:1]
     print(values)
