@@ -54,7 +54,7 @@ rskf = RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats, random_st
 scores=np.zeros((n_score_functions,n_datasets,n_metrics, n_splits * n_repeats))
 
 for data_id, dataset in enumerate(datasets):
-    print("aaa",dataset," bbb ","datasets/%s.csv" % (dataset))
+    print("Dataset:",dataset)
     dataset = np.genfromtxt("datasets/%s.csv" % (dataset), delimiter=";")
     X = dataset[:, :-1]
     y = dataset[:, -1].astype(int)
