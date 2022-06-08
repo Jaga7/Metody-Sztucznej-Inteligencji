@@ -42,6 +42,15 @@ score_functions= {
 #     'bac': balanced_accuracy_score,
 # }
 
+# scores=np.zeros((n_score_functions,n_datasets,n_metrics, n_splits * n_repeats))
+
+dataset=2
+metryka=4
+
+print("chi2: ",mean_scores[0,dataset,metryka])
+print("f_classif: ",mean_scores[1,dataset,metryka])
+print("hellinger: ",mean_scores[2,dataset,metryka])
+
 alfa = .05
 t_statistic_f1 = np.zeros((len(score_functions), len(score_functions)))
 p_value_f1 = np.zeros((len(score_functions), len(score_functions)))
@@ -50,11 +59,11 @@ for i in range(len(score_functions)):
     for j in range(len(score_functions)):
         # Tu trzeba robić, mean_scores[i,0-9(datasety),4-6(metryki)]
         # 4: f1-score, 5: g-mean, 6: balanced accuracy
-        t_statistic_f1[i, j], p_value_f1[i, j] = ttest_rel(mean_scores[i,0,4], mean_scores[j,0,4])
+        t_statistic_f1[i, j], p_value_f1[i, j] = ttest_rel(mean_scores[i,dataset,metryka], mean_scores[j,dataset,metryka])
 # print("t-statistic:\n", t_statistic_f1, "\n\np-value:\n", p_value_f1)
 
 
-print("\nG-mean:\n")
+# print("\nG-mean:\n")
 headers = ["chi2", "ANOVA", "Hellinger"]
 names_column = np.array([["chi2"], ["ANOVA"], ["Hellinger"]])
 t_statistic_table = np.concatenate((names_column, t_statistic_f1), axis=1)
