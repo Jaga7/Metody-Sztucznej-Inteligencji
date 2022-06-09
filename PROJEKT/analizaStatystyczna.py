@@ -89,5 +89,5 @@ significance_table = tabulate(np.concatenate(
 
 stat_better = significance * advantage
 stat_better_table = tabulate(np.concatenate(
-    (names_column, stat_better), axis=1), headers)
+    (names_column, stat_better), axis=1), headers, tablefmt="latex")
 print("\n\nStatistically significantly better:\n", stat_better_table)
