@@ -10,6 +10,8 @@ print(scores.shape)
 # print(scores[0,0,3])
 # print(scores[0,0,4])
 # print(scores[0,0,5])
+std = np.std(scores, axis=3)
+
 
 mean_scores = np.mean(scores, axis=3)
 print(mean_scores.shape)
@@ -47,11 +49,11 @@ score_functions= {
 
 
 dataset=1
-metryka=5
+metryka=4
 
-print("chi2: ",mean_scores[0,dataset,metryka])
-print("f_classif: ",mean_scores[1,dataset,metryka])
-print("hellinger: ",mean_scores[2,dataset,metryka])
+print("chi2: ",mean_scores[0,dataset,metryka], "std: ",std[0,dataset,metryka])
+print("f_classif: ",mean_scores[1,dataset,metryka],"std: ",std[1,dataset,metryka])
+print("hellinger: ",mean_scores[2,dataset,metryka],"std: ",std[2,dataset,metryka])
 
 alfa = .05
 t_statistic_f1 = np.zeros((len(score_functions), len(score_functions)))
