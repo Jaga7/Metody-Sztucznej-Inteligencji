@@ -28,9 +28,6 @@ score_functions= {
     "hellinger"
 }
 
-# datasets = ['cleveland_0_vs_4', 'segment0', 'winequality_red_3_vs_5', 'winequality_red_4', 'winequality_red_8_vs_6',
-#             'winequality_red_8_vs_6_7', 'winequality_white_3_9_vs_5', 'winequality_white_3_vs_7', 'winequality_white_9_vs_4','page_blocks_1_3_vs_4']
-
 
 # metrics = {
 #     "accuracy":accuracy_score,
@@ -44,8 +41,13 @@ score_functions= {
 
 # scores=np.zeros((n_score_functions,n_datasets,n_metrics, n_splits * n_repeats))
 
-dataset=2
-metryka=4
+
+# datasets = ['cleveland_0_vs_4', 'segment0', 'winequality_red_3_vs_5', 'winequality_red_4', 'winequality_red_8_vs_6',
+#             'winequality_red_8_vs_6_7', 'winequality_white_3_9_vs_5', 'winequality_white_3_vs_7', 'winequality_white_9_vs_4','page_blocks_1_3_vs_4']
+
+
+dataset=1
+metryka=5
 
 print("chi2: ",mean_scores[0,dataset,metryka])
 print("f_classif: ",mean_scores[1,dataset,metryka])
@@ -59,7 +61,8 @@ for i in range(len(score_functions)):
     for j in range(len(score_functions)):
         # Tu trzeba robić, mean_scores[i,0-9(datasety),4-6(metryki)]
         # 4: f1-score, 5: g-mean, 6: balanced accuracy
-        t_statistic_f1[i, j], p_value_f1[i, j] = ttest_rel(mean_scores[i,dataset,metryka], mean_scores[j,dataset,metryka])
+        t_statistic_f1[i, j], p_value_f1[i, j] = ttest_rel(scores[i,dataset,metryka], scores[j,dataset,metryka])
+        # print(mean_scores[i,dataset,metryka])
 # print("t-statistic:\n", t_statistic_f1, "\n\np-value:\n", p_value_f1)
 
 
@@ -89,5 +92,5 @@ significance_table = tabulate(np.concatenate(
 
 stat_better = significance * advantage
 stat_better_table = tabulate(np.concatenate(
-    (names_column, stat_better), axis=1), headers, tablefmt="latex")
+    (names_column, stat_better), axis=1), headers)
 print("\n\nStatistically significantly better:\n", stat_better_table)
